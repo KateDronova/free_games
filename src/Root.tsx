@@ -17,10 +17,11 @@ function Root() {
             target="_blank"
             rel="noreferrer"
           >
-            GitHub
+            GitHub,
           </a>
         </span>
         <span>2023</span>
+        <span>Источник / The source of API : <a href="https://www.freetogame.com/api-doc">FreeToGame.com</a></span>
       </footer>
     </>
   );

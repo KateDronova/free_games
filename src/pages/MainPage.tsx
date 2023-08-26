@@ -4,7 +4,7 @@ function MainPage() {
   return (
     <nav>
       <section>
-        Search / Поиск
+        Поиск / Search
         <input type='text'></input>
       </section>
       <section>

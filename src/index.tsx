@@ -10,6 +10,7 @@ import {
   RouterProvider
 } from "react-router-dom";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
-        path: "game/:gameId",
+        path: ":gameId",
         element: <GamePage />,
       },
     ]
