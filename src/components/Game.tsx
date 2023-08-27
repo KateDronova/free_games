@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { GameInAListInterface } from '../interfaces/gameInAListInterface';
-import dateFormatter from '../dateFormatter';
+import dateFormatter from '../utils/dateFormatter';
 
 function Game({
   id,

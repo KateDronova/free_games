@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom';
 
 function Root() {
   return (
@@ -21,7 +21,10 @@ function Root() {
           </a>
         </span>
         <span>2023</span>
-        <span>Источник / The source of API : <a href="https://www.freetogame.com/api-doc">FreeToGame.com</a></span>
+        <span>
+          Источник / The source of API :{' '}
+          <a href="https://www.freetogame.com/api-doc">FreeToGame.com</a>
+        </span>
       </footer>
     </>
   );

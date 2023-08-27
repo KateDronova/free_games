@@ -5,52 +5,36 @@ import { GameInAListInterface } from '../interfaces/gameInAListInterface';
 function GameList() {
   const [games, setGames] = useState<[]>([]);
   const url = 'https://www.freetogame.com/api/games';
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getGameList: Function = (games: any[]): React.ReactElement[] =>
+    games.map((game: GameInAListInterface) => {
+      const gameProps = { key: game.id, ...game };
+      return <Game {...gameProps} />;
+    });
+
 
   useEffect(() => {
     fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        setGames(data);
-      })
-      .catch((error) => console.log('New error: ', error.message));
-  }, [games]);
+    .then((response) => response.json())
+    .then((data) => {
+      setGames(data);
+    })
+    .then(() => {
+      const loaderElem = document.querySelector('.loaderForMainPage');
+      if (loaderElem) {
+        loaderElem.remove();
+        setIsLoading(!isLoading);
+      }
+    })
+    .catch((error) => console.log('New error: ', error.message));
+  }, []);
 
-  // useEffect(() => {
-  //   let ignore = false;
-  //   setBio(null);
-  //   fetch(url) //path to the file with json data
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       while (gameList.length < 100) {
-  //         gameList.push(...data);
-  //       }
-  //       if (!ignore) {
-  //         setBio(data)
-  //       }
-  //       init(gameList);
-  //     });
-  //     return () => {
-  //       ignore = true;
-  //     }
-  // }, [gameList]);
+  if (isLoading) {
+    return null;
+  }
 
-  return games ? (
-    games.map((game: GameInAListInterface) => (
-      <Game
-        key={game.id}
-        id={game.id}
-        title={game.title}
-        release_date={game.release_date}
-        publisher={game.publisher}
-        genre={game.genre}
-        thumbnail={game.thumbnail}
-      />
-    ))
-  ) : (
-    <p>Loading...</p>
-  );
+  return getGameList(games);
 }
 
 export default GameList;
