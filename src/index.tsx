@@ -4,6 +4,7 @@ import './index.css';
 import Root from './Root';
 import MainPage from './pages/MainPage';
 import GamePage from './pages/GamePage';
+import ErrorPage from './pages/ErrorPage';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
@@ -19,11 +20,13 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <MainPage />,
+        errorElement: <ErrorPage />
       },
       {
         path: ":gameId",
         element: <GamePage />,
-      },
+        errorElement: <ErrorPage />
+      }
     ]
   },
 ]);

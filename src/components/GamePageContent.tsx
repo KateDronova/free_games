@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { GameInterface } from '../interfaces/gameInterface';
 import dateFormatter from '../utils/dateFormatter';
+import ErrorPage from '../pages/ErrorPage';
 
 function GamePageContent() {
   const [game, setGame] = useState<GameInterface | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error>();
   const location = useLocation();
   const { id } = location.state;
+  // const url = `https://www.freeERRORtogame.com/api/game?id=${id}`;
   const url = `https://www.freetogame.com/api/game?id=${id}`;
 
   useEffect(() => {
@@ -16,6 +19,9 @@ function GamePageContent() {
       .then((data) => {
         setGame(data);
       })
+      .catch((error) => {
+        setError(error);
+      })
       .then(() => {
         const loaderElem: HTMLDivElement | null = document.querySelector('.loaderForGamePage');
         if (loaderElem && !loaderElem.classList.contains('hidden')) {
@@ -23,7 +29,6 @@ function GamePageContent() {
           setIsLoading(!isLoading);
         }
       })
-      .catch((error) => console.log('New error: ', error.message));
   }, []);
 
   const date: string = game?.release_date
@@ -53,8 +58,7 @@ function GamePageContent() {
       </>
     );
   }
-
-  return (
+  return error ? <ErrorPage errorMessage={error.message} /> : (
     <>
       <h2>{game?.title}</h2>
       <img src={game?.thumbnail} alt="poster"></img>
