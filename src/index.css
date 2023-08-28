@@ -16,3 +16,12 @@ code {
   text-decoration: none;
   color: #000;
 }
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+  margin: 0;
+  padding: 0;
+  width: 0px;
+  height: 0px;
+}

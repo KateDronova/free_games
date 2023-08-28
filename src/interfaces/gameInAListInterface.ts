@@ -4,5 +4,6 @@ export interface GameInAListInterface {
   release_date: string;
   publisher: string;
   genre: string;
-  thumbnail: string
+  thumbnail: string;
+  platform: string;
 }

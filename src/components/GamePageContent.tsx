@@ -17,9 +17,9 @@ function GamePageContent() {
         setGame(data);
       })
       .then(() => {
-        const loaderElem = document.querySelector('.loaderForGamePage');
-        if (loaderElem) {
-          loaderElem.remove();
+        const loaderElem: HTMLDivElement | null = document.querySelector('.loaderForGamePage');
+        if (loaderElem && !loaderElem.classList.contains('hidden')) {
+          loaderElem.classList.add('hidden');
           setIsLoading(!isLoading);
         }
       })
@@ -67,6 +67,7 @@ function GamePageContent() {
 
       <p>Cистемные требования / Requirements :</p>
       <ul>
+        <li>Платформа / Platform : {game?.platform}</li>
         <li>Графика / Graphics : {graphics}</li>
         <li>Оперативная память / Memory : {memory}</li>
         <li>ОС / OS : {os}</li>

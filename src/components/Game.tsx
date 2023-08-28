@@ -9,6 +9,7 @@ function Game({
   publisher,
   genre,
   thumbnail,
+  platform
 }: GameInAListInterface) {
 
   const date = dateFormatter(release_date);

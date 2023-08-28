@@ -10,5 +10,6 @@ export interface GameInterface {
   genre: string;
   thumbnail: string;
   minimum_system_requirements: Requirements;
+  platform: string;
   screenshots: ScreenshotInterface[];
 }
