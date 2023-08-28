@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import GameList from '../components/GameList';
 import Loader from '../components/Loader';
+import { Space } from 'antd';
 
 function MainPage() {
   const [sortCategory, setSortCategory] = useState('relevance');
   const [filterCategory, setFilterCategory] = useState('');
   const [filterItem, setFilterItem] = useState('');
-
+  
   return (
     <>
       <section>
-        <nav>
+        <Space
+          direction="vertical"
+          size="small"
+          style={{ display: 'flex' }}
+          align="start"
+        >
           <form>
             <label>
               Фильтр / Filter
@@ -25,11 +31,11 @@ function MainPage() {
                 }}
               >
                 <option value="all">Все значения / All items</option>
-                <optgroup label="Платформа / Platform" data-category="platform">
+                <optgroup label="Платформа / Platform">
                   <option value="pc">PC (Windows)</option>
                   <option value="browser">Web Browser</option>
                 </optgroup>
-                <optgroup label="Жанр / Category" data-category="category">
+                <optgroup label="Жанр / Category">
                   <option value="2d">2d</option>
                   <option value="3d">3d</option>
                   <option value="action">Action</option>
@@ -96,15 +102,17 @@ function MainPage() {
               </select>
             </label>
           </form>
-        </nav>
+        </Space>
         <div className="loaderForMainPage">
           <Loader />
         </div>
-        <GameList
-          sortCategory={sortCategory}
-          filterCategory={filterCategory}
-          filterItem={filterItem}
-        />
+        <nav>
+          <GameList
+            sortCategory={sortCategory}
+            filterCategory={filterCategory}
+            filterItem={filterItem}
+          />
+        </nav>
       </section>
     </>
   );

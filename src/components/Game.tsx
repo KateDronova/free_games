@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { GameInAListInterface } from '../interfaces/gameInAListInterface';
+import { List } from 'antd';
 import dateFormatter from '../utils/dateFormatter';
+// import getBasicInfo from '../utils/getBasicInfo';
 
 function Game({
   id,
@@ -9,19 +11,30 @@ function Game({
   publisher,
   genre,
   thumbnail,
-  platform
 }: GameInAListInterface) {
-
   const date = dateFormatter(release_date);
   const link = `${id}`;
 
+  function getBasicInfoMain() {
+    const basicInfoMain: string[] = [
+      `Жанр / Genr : ${genre}`,
+      `Издатель / Publisher : ${publisher}`,
+      `Дата релиза / Release : ${date}`,
+    ];
+    return basicInfoMain;
+  }
+
   return (
-    <Link to={link} className='game' state={{ id: link }}>
-      <h3>{title}</h3>
-      <img src={thumbnail} alt="poster"></img>
-      <p>Жанр / Genr : {genre}</p>
-      <p>Издатель / Publisher : {publisher}</p>
-      <p>Дата релиза / Release : {date}</p>
+    <Link to={link} state={{ id: link }}>
+      <div className="game">
+        <h3>{title}</h3>
+        <img src={thumbnail} alt="poster"></img>
+        <List
+          size="small"
+          dataSource={getBasicInfoMain()}
+          renderItem={(item) => <List.Item>{item}</List.Item>}
+        ></List>
+      </div>
     </Link>
   );
 }

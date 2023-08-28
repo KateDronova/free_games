@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 function Root() {
   return (
     <>
       <header>
-        <h1>Free-To-Play Games</h1>
+        <Link to="/">
+          <h1>Free-To-Play Games</h1>
+        </Link>
       </header>
       <main>
         <Outlet />

@@ -3,7 +3,7 @@ import Game from './Game';
 import { GameInAListInterface } from '../interfaces/gameInAListInterface';
 import { GameListPropsInterface } from '../interfaces/gameListPropsInterface';
 import ErrorPage from '../pages/ErrorPage';
-
+import { Space, List } from 'antd';
 
 const GameList: React.FC<GameListPropsInterface> = ({
   sortCategory,
@@ -39,14 +39,27 @@ const GameList: React.FC<GameListPropsInterface> = ({
           loaderElem.classList.add('hidden');
           setIsLoading(!isLoading);
         }
-      })
+      });
   }, [sortCategory, filterCategory, filterItem]);
 
   if (isLoading) {
     return null;
   }
 
-  return error ? <ErrorPage errorMessage={error.message} /> : getGameList(games);
+  return error ? (
+    <ErrorPage errorMessage={error.message} />
+  ) : (
+    <Space
+      direction="horizontal"
+      size="large"
+      style={{ display: 'flex' }}
+      wrap
+      align='center'
+      className='justify-center'
+    >
+      {getGameList(games)}
+    </Space>
+  );
 };
 
 export default GameList;

@@ -12,9 +12,58 @@ code {
     monospace;
 }
 
-.game {
+html {
+  background-color: #999;
+}
+
+body {
+  max-width: 1280px;
+  margin: auto;
+}
+
+div#root {
+  margin: 0 40px;
+}
+
+h1 {
+  font-size: 2.2em;
+}
+
+h2,
+h3 {
+  text-align: center;
+}
+
+a {
   text-decoration: none;
   color: #000;
+  &:hover {
+    color: #000;
+  }
+}
+
+.game {
+  border: 1px solid #999;
+  background-color: #ccc;
+  &:hover {
+    box-shadow: 1px 1px 10px #000;
+  }
+  &:active {
+    box-shadow: 1px 1px 5px #000;
+  }
+}
+
+select {
+  padding: 5px 10px;
+  margin: 0px 8px;
+  border-radius: 5px;
+  &:hover {
+    box-shadow: 0px 0px 4px #000;
+  }
+}
+
+.justify-center {
+  justify-content: space-between;
 }
 
 .hidden {
