@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, SetStateAction } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Carousel, Space, List } from 'antd';
 import { GameInterface } from '../interfaces/gameInterface';
+import ErrorPage from '../pages/ErrorPage';
 import dateFormatter from '../utils/dateFormatter';
 import getBasicInfo from '../utils/getBasicInfo';
-import ErrorPage from '../pages/ErrorPage';
-import { Carousel, Space, List } from 'antd';
+const originalFetch = require('isomorphic-fetch');
+const fetch = require('fetch-retry')(originalFetch);
 
 function GamePageContent() {
   const [game, setGame] = useState<GameInterface | null>(null);
@@ -16,12 +18,15 @@ function GamePageContent() {
   const url = `https://www.freetogame.com/api/game?id=${id}`;
 
   useEffect(() => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
+    fetch(url, {
+      retries: 3,
+      retryDelay: 2000
+    })
+      .then((response: Response) => response.json())
+      .then((data: SetStateAction<GameInterface | null>) => {
         setGame(data);
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         setError(error);
       })
       .then(() => {
@@ -32,7 +37,26 @@ function GamePageContent() {
           setIsLoading(!isLoading);
         }
       });
-  }, []);
+  }, [isLoading, url]);
+
+  // useEffect(() => {
+  //   fetch(url)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setGame(data);
+  //     })
+  //     .catch((error) => {
+  //       setError(error);
+  //     })
+  //     .then(() => {
+  //       const loaderElem: HTMLDivElement | null =
+  //         document.querySelector('.loaderForGamePage');
+  //       if (loaderElem && !loaderElem.classList.contains('hidden')) {
+  //         loaderElem.classList.add('hidden');
+  //         setIsLoading(!isLoading);
+  //       }
+  //     });
+  // }, [isLoading, url]);
 
   const date: string = game?.release_date
     ? dateFormatter(`${game?.release_date}`)
@@ -46,21 +70,15 @@ function GamePageContent() {
     );
   });
 
-  const graphics = game?.minimum_system_requirements.graphics;
-  const memory = game?.minimum_system_requirements.memory;
-  const os = game?.minimum_system_requirements.os;
-  const processor = game?.minimum_system_requirements.processor;
-  const storage = game?.minimum_system_requirements.storage;
+  const graphics = game?.minimum_system_requirements?.graphics || '?';
+  const memory = game?.minimum_system_requirements?.memory || '?';
+  const os = game?.minimum_system_requirements?.os || '?';
+  const processor = game?.minimum_system_requirements?.processor || '?';
+  const storage = game?.minimum_system_requirements?.storage || '?';
   const basicInfo = getBasicInfo(game, date);
 
   if (isLoading) {
-    return (
-      <>
-        <button>
-          <Link to="/">Return to Main page</Link>
-        </button>
-      </>
-    );
+    return null;
   }
 
   return error ? (
@@ -75,7 +93,7 @@ function GamePageContent() {
         direction="horizontal"
         wrap
         className="just-content-space-between"
-        align='start'
+        align="start"
       >
         <img src={game?.thumbnail} alt="poster" />
         <section>

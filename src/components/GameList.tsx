@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
-import Game from './Game';
+import { useEffect, useState, SetStateAction } from 'react';
 import { GameInAListInterface } from '../interfaces/gameInAListInterface';
 import { GameListPropsInterface } from '../interfaces/gameListPropsInterface';
+import { Space } from 'antd';
+import Game from './Game';
 import ErrorPage from '../pages/ErrorPage';
-import { Space, List } from 'antd';
+const originalFetch = require('isomorphic-fetch');
+const fetch = require('fetch-retry')(originalFetch);
 
 const GameList: React.FC<GameListPropsInterface> = ({
   sortCategory,
@@ -24,12 +26,15 @@ const GameList: React.FC<GameListPropsInterface> = ({
     });
 
   useEffect(() => {
-    fetch(urlCommon)
-      .then((response) => response.json())
-      .then((data) => {
+    fetch(urlCommon, {
+      retries: 3,
+      retryDelay: 2000
+    })
+      .then((response: Response) => response.json())
+      .then((data: SetStateAction<[]>) => {
         setGames(data);
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         setError(error);
       })
       .then(() => {
@@ -40,7 +45,7 @@ const GameList: React.FC<GameListPropsInterface> = ({
           setIsLoading(!isLoading);
         }
       });
-  }, [sortCategory, filterCategory, filterItem]);
+  }, [sortCategory, filterCategory, filterItem, isLoading, urlCommon]);
 
   if (isLoading) {
     return null;

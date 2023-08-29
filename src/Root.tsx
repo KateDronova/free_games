@@ -1,6 +1,5 @@
-import { Space } from 'antd';
 import { Outlet } from 'react-router-dom';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Root() {
   const headerSize = '2.2em';
