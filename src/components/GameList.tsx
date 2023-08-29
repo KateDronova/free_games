@@ -55,7 +55,7 @@ const GameList: React.FC<GameListPropsInterface> = ({
       style={{ display: 'flex' }}
       wrap
       align='center'
-      className='justify-center'
+      className='just-content-space-between'
     >
       {getGameList(games)}
     </Space>

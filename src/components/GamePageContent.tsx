@@ -41,7 +41,7 @@ function GamePageContent() {
   const screenshots = game?.screenshots.map((item) => {
     return (
       <li key={item.id}>
-        <img src={item.image} alt="screenshot" height="500px" />
+        <img src={item.image} alt="screenshot" width="100%" />
       </li>
     );
   });
@@ -68,22 +68,35 @@ function GamePageContent() {
   ) : (
     <>
       <h2>{game?.title}</h2>
-      <Space style={{ display: 'flex' }} direction="horizontal" wrap>
-        <img src={game?.thumbnail} alt="poster"></img>
+
+      <Space
+        style={{ display: 'flex', marginBottom: '20px' }}
+        size={'large'}
+        direction="horizontal"
+        wrap
+        className="just-content-space-between"
+        align='start'
+      >
+        <img src={game?.thumbnail} alt="poster" />
         <section>
           <List
             size="small"
-            header={<h3>Общая Информация / Common Info</h3>}
+            header={
+              <h3 style={{ margin: 0 }}>Общая Информация / Common Info</h3>
+            }
             dataSource={basicInfo}
             renderItem={(item) => <List.Item>{item}</List.Item>}
           />
         </section>
+        <button>
+          <Link to="/">Return to Main page</Link>
+        </button>
       </Space>
 
       <Carousel>{screenshots}</Carousel>
 
       <section>
-        <p>Cистемные требования / Requirements :</p>
+        <h3>Cистемные требования / Requirements :</h3>
         <ul>
           <li>Платформа / Platform : {game?.platform}</li>
           <li>Графика / Graphics : {graphics}</li>
@@ -93,10 +106,6 @@ function GamePageContent() {
           <li>Объём данных / Storage : {storage}</li>
         </ul>
       </section>
-
-      <button>
-        <Link to="/">Return to Main page</Link>
-      </button>
     </>
   );
 }

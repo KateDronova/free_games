@@ -32,7 +32,7 @@ function Game({
         <List
           size="small"
           dataSource={getBasicInfoMain()}
-          renderItem={(item) => <List.Item>{item}</List.Item>}
+          renderItem={(item) => <List.Item>{item.length > 55 ? item.slice(0,51) + "..." : item}</List.Item>}
         ></List>
       </div>
     </Link>
