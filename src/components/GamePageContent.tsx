@@ -52,12 +52,15 @@ function GamePageContent() {
   useEffect(() => {
     const loaderElem: HTMLDivElement | null =
       document.querySelector('.loaderForGamePage');
-    if (currentGame) {
-      setGame(currentGame);
+    const hideLoader = () => {
       if (loaderElem && !loaderElem.classList.contains('hidden')) {
         loaderElem.classList.add('hidden');
         setIsLoading(false);
       }
+    }
+    if (currentGame) {
+      setGame(currentGame);
+      hideLoader();
     } else {
       fetch(url, {
         retries: 3,
@@ -65,20 +68,16 @@ function GamePageContent() {
       })
         .then((response: Response) => response.json())
         .then((data: GameInterface) => {
-          if (loaderElem && !loaderElem.classList.contains('hidden')) {
-            loaderElem.classList.add('hidden');
-            setIsLoading(false);
-          }
           setGame(data);
-
           dispatch(tempSaveOpenedGameInfo(data));
-
           setTimeout(() => {
             dispatch(removeOpenedGameInfo());
           }, 300000);
+          hideLoader();
         })
         .catch((error: Error) => {
           setError(error);
+          hideLoader();
         });
     }
   }, [currentGame, url, dispatch]);
