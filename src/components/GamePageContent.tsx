@@ -1,4 +1,11 @@
-import { useEffect, useState, SetStateAction } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  tempSaveOpenedGameInfo,
+  removeOpenedGameInfo,
+} from '../redux/gameSlice';
+import { selectOpenedGames } from '../redux/gameSlice';
+
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Carousel, Space, List } from 'antd';
 import { GameInterface } from '../interfaces/gameInterface';
@@ -16,47 +23,6 @@ function GamePageContent() {
   const { id } = location.state;
   // const url = `https://www.freeERRORtogame.com/api/game?id=${id}`;
   const url = `https://www.freetogame.com/api/game?id=${id}`;
-
-  useEffect(() => {
-    fetch(url, {
-      retries: 3,
-      retryDelay: 2000
-    })
-      .then((response: Response) => response.json())
-      .then((data: SetStateAction<GameInterface | null>) => {
-        setGame(data);
-      })
-      .catch((error: Error) => {
-        setError(error);
-      })
-      .then(() => {
-        const loaderElem: HTMLDivElement | null =
-          document.querySelector('.loaderForGamePage');
-        if (loaderElem && !loaderElem.classList.contains('hidden')) {
-          loaderElem.classList.add('hidden');
-          setIsLoading(!isLoading);
-        }
-      });
-  }, [isLoading, url]);
-
-  // useEffect(() => {
-  //   fetch(url)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setGame(data);
-  //     })
-  //     .catch((error) => {
-  //       setError(error);
-  //     })
-  //     .then(() => {
-  //       const loaderElem: HTMLDivElement | null =
-  //         document.querySelector('.loaderForGamePage');
-  //       if (loaderElem && !loaderElem.classList.contains('hidden')) {
-  //         loaderElem.classList.add('hidden');
-  //         setIsLoading(!isLoading);
-  //       }
-  //     });
-  // }, [isLoading, url]);
 
   const date: string = game?.release_date
     ? dateFormatter(`${game?.release_date}`)
@@ -76,6 +42,46 @@ function GamePageContent() {
   const processor = game?.minimum_system_requirements?.processor || '?';
   const storage = game?.minimum_system_requirements?.storage || '?';
   const basicInfo = getBasicInfo(game, date);
+
+  const dispatch = useDispatch();
+  const openedGames = useSelector(selectOpenedGames);
+  const currentGame = openedGames.find(
+    (item: GameInterface) => +item.id === +id
+  );
+
+  useEffect(() => {
+    const loaderElem: HTMLDivElement | null =
+      document.querySelector('.loaderForGamePage');
+    if (currentGame) {
+      setGame(currentGame);
+      if (loaderElem && !loaderElem.classList.contains('hidden')) {
+        loaderElem.classList.add('hidden');
+        setIsLoading(false);
+      }
+    } else {
+      fetch(url, {
+        retries: 3,
+        retryDelay: 2000,
+      })
+        .then((response: Response) => response.json())
+        .then((data: GameInterface) => {
+          if (loaderElem && !loaderElem.classList.contains('hidden')) {
+            loaderElem.classList.add('hidden');
+            setIsLoading(false);
+          }
+          setGame(data);
+
+          dispatch(tempSaveOpenedGameInfo(data));
+
+          setTimeout(() => {
+            dispatch(removeOpenedGameInfo());
+          }, 300000);
+        })
+        .catch((error: Error) => {
+          setError(error);
+        });
+    }
+  }, [currentGame, url, dispatch]);
 
   if (isLoading) {
     return null;

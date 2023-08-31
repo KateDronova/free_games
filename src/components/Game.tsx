@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { GameInAListInterface } from '../interfaces/gameInAListInterface';
 import { List } from 'antd';
 import dateFormatter from '../utils/dateFormatter';
-// import getBasicInfo from '../utils/getBasicInfo';
 
 function Game({
   id,
@@ -12,6 +11,7 @@ function Game({
   genre,
   thumbnail,
 }: GameInAListInterface) {
+
   const date = dateFormatter(release_date);
   const link = `${id}`;
 
